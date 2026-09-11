@@ -27,6 +27,11 @@ import 'package:propmatch_mobile/features/ekyc/data/datasources/ekyc_remote_data
 import 'package:propmatch_mobile/features/ekyc/data/repositories/ekyc_repository_impl.dart';
 import 'package:propmatch_mobile/features/ekyc/domain/repositories/ekyc_repository.dart';
 import 'package:propmatch_mobile/features/ekyc/presentation/cubit/ekyc_cubit.dart';
+// Notifications
+import 'package:propmatch_mobile/features/notifications/data/datasources/notifications_remote_datasource.dart';
+import 'package:propmatch_mobile/features/notifications/data/repositories/notifications_repository_impl.dart';
+import 'package:propmatch_mobile/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:propmatch_mobile/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -114,5 +119,18 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<EkycCubit>(
     () => EkycCubit(repository: sl<EkycRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: Notifications
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<NotificationsRemoteDataSource>(
+    () => NotificationsRemoteDataSourceImpl(sl<DioClient>()),
+  );
+  sl.registerLazySingleton<NotificationsRepository>(
+    () => NotificationsRepositoryImpl(sl<NotificationsRemoteDataSource>()),
+  );
+  sl.registerFactory<NotificationsCubit>(
+    () => NotificationsCubit(repository: sl<NotificationsRepository>()),
   );
 }
