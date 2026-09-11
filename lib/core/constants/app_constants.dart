@@ -8,6 +8,7 @@ class AppConstants {
   static const double radiusMd = 12.0;
   static const double radiusLg = 16.0;
   static const double radiusXl = 24.0;
+  static const double radiusFull = 9999.0;
   
   static const double paddingXs = 4.0;
   static const double paddingSm = 8.0;

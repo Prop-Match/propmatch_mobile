@@ -85,6 +85,7 @@ class _PackagesViewState extends State<_PackagesView> with SingleTickerProviderS
                 ),
               ).then((completed) {
                 if (completed == true) {
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('تم إتمام عملية الدفع وتحديث الرصيد بنجاح!'),

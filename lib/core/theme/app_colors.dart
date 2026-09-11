@@ -20,6 +20,7 @@ class AppColors {
   static const Color error = Color(0xFFDC2626);
   static const Color errorTint = Color(0xFFFEE2E2);
   static const Color info = Color(0xFF1F6FEB);
+  static const Color pending = Color(0xFFF59E0B);
 
   // Neutrals & Backgrounds
   static const Color background = Color(0xFFF7FAFB);

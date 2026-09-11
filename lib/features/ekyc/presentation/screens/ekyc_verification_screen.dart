@@ -274,7 +274,7 @@ class _EkycVerificationViewState extends State<_EkycVerificationView> {
           decoration: InputDecoration(
             labelText: 'الرقم القومي (14 رقم)',
             hintText: '2990101XXXXXXXXX',
-            prefixIcon: const Icon(LucideIcons.fingerprint, color: AppColors.primary),
+            prefixIcon: const Icon(Icons.fingerprint, color: AppColors.primary),
             filled: true,
             fillColor: AppColors.surface,
             border: OutlineInputBorder(
