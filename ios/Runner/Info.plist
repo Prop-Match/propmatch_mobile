@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>نحتاج إلى إذن استخدام الكاميرا لالتقاط بطاقة الرقم القومي والصورة الشخصية لتوثيق الهوية الوطنية</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>نحتاج إلى إذن الوصول إلى الصور لاختيار بطاقة الرقم القومي من المعرض</string>
 </dict>
 </plist>

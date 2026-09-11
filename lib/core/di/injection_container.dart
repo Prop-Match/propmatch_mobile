@@ -12,16 +12,21 @@ import 'package:propmatch_mobile/features/landlord/data/datasources/landlord_rem
 import 'package:propmatch_mobile/features/landlord/data/repositories/landlord_repository_impl.dart';
 import 'package:propmatch_mobile/features/landlord/domain/repositories/landlord_repository.dart';
 import 'package:propmatch_mobile/features/landlord/presentation/cubit/landlord_dashboard_cubit.dart';
-// Matching & Chat
-import 'package:propmatch_mobile/features/matching_chat/data/datasources/chat_remote_datasource.dart';
-import 'package:propmatch_mobile/features/matching_chat/data/repositories/chat_repository_impl.dart';
-import 'package:propmatch_mobile/features/matching_chat/domain/repositories/chat_repository.dart';
-import 'package:propmatch_mobile/features/matching_chat/presentation/cubit/chat_cubit.dart';
 // Tenant
 import 'package:propmatch_mobile/features/tenant/data/datasources/tenant_remote_datasource.dart';
 import 'package:propmatch_mobile/features/tenant/data/repositories/tenant_repository_impl.dart';
 import 'package:propmatch_mobile/features/tenant/domain/repositories/tenant_repository.dart';
 import 'package:propmatch_mobile/features/tenant/presentation/cubit/tenant_browse_cubit.dart';
+// Matching & Chat
+import 'package:propmatch_mobile/features/matching_chat/data/datasources/chat_remote_datasource.dart';
+import 'package:propmatch_mobile/features/matching_chat/data/repositories/chat_repository_impl.dart';
+import 'package:propmatch_mobile/features/matching_chat/domain/repositories/chat_repository.dart';
+import 'package:propmatch_mobile/features/matching_chat/presentation/cubit/chat_cubit.dart';
+// eKYC
+import 'package:propmatch_mobile/features/ekyc/data/datasources/ekyc_remote_datasource.dart';
+import 'package:propmatch_mobile/features/ekyc/data/repositories/ekyc_repository_impl.dart';
+import 'package:propmatch_mobile/features/ekyc/domain/repositories/ekyc_repository.dart';
+import 'package:propmatch_mobile/features/ekyc/presentation/cubit/ekyc_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -96,5 +101,18 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<ChatCubit>(
     () => ChatCubit(repository: sl<ChatRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: eKYC
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<EkycRemoteDataSource>(
+    () => EkycRemoteDataSourceImpl(sl<DioClient>()),
+  );
+  sl.registerLazySingleton<EkycRepository>(
+    () => EkycRepositoryImpl(sl<EkycRemoteDataSource>()),
+  );
+  sl.registerFactory<EkycCubit>(
+    () => EkycCubit(repository: sl<EkycRepository>()),
   );
 }
