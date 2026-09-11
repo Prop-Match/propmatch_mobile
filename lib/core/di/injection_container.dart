@@ -42,6 +42,7 @@ import 'package:propmatch_mobile/features/legal_support/data/datasources/legal_s
 import 'package:propmatch_mobile/features/legal_support/data/repositories/legal_support_repository_impl.dart';
 import 'package:propmatch_mobile/features/legal_support/domain/repositories/legal_support_repository.dart';
 import 'package:propmatch_mobile/features/legal_support/presentation/cubit/legal_support_cubit.dart';
+import 'package:propmatch_mobile/core/services/push_notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -168,5 +169,12 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<LegalSupportCubit>(
     () => LegalSupportCubit(repository: sl<LegalSupportRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: Mobile Push Notifications
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<MobilePushNotificationService>(
+    () => MobilePushNotificationService(dioClient: sl<DioClient>()),
   );
 }

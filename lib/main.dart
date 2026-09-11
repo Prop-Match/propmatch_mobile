@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'core/di/injection_container.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
+import 'core/services/push_notification_service.dart';
 
 // Auth
 import 'features/auth/domain/repositories/auth_repository.dart';
@@ -29,6 +30,11 @@ void main() async {
 
   // Initialize GetIt dependency injection container
   await initDependencies();
+
+  // Initialize Push Notifications (FCM)
+  try {
+    await sl<MobilePushNotificationService>().initialize();
+  } catch (_) {}
 
   // Determine initial location based on cached session
   final authRepository = sl<AuthRepository>();
