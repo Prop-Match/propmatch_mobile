@@ -37,6 +37,11 @@ import 'package:propmatch_mobile/features/subscriptions/data/datasources/commerc
 import 'package:propmatch_mobile/features/subscriptions/data/repositories/commercial_repository_impl.dart';
 import 'package:propmatch_mobile/features/subscriptions/domain/repositories/commercial_repository.dart';
 import 'package:propmatch_mobile/features/subscriptions/presentation/cubit/commercial_cubit.dart';
+// Legal Support
+import 'package:propmatch_mobile/features/legal_support/data/datasources/legal_support_remote_datasource.dart';
+import 'package:propmatch_mobile/features/legal_support/data/repositories/legal_support_repository_impl.dart';
+import 'package:propmatch_mobile/features/legal_support/domain/repositories/legal_support_repository.dart';
+import 'package:propmatch_mobile/features/legal_support/presentation/cubit/legal_support_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -150,5 +155,18 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<CommercialCubit>(
     () => CommercialCubit(repository: sl<CommercialRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: Legal Support
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<LegalSupportRemoteDataSource>(
+    () => LegalSupportRemoteDataSourceImpl(sl<DioClient>()),
+  );
+  sl.registerLazySingleton<LegalSupportRepository>(
+    () => LegalSupportRepositoryImpl(sl<LegalSupportRemoteDataSource>()),
+  );
+  sl.registerFactory<LegalSupportCubit>(
+    () => LegalSupportCubit(repository: sl<LegalSupportRepository>()),
   );
 }

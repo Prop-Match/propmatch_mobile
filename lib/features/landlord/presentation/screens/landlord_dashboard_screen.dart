@@ -31,7 +31,18 @@ class _LandlordDashboardScreenState extends State<LandlordDashboardScreen> {
         title: const Text('لوحة تحكم المالك'),
         actions: [
           IconButton(
+            icon: const Icon(LucideIcons.package_open),
+            tooltip: 'الباقات والاشتراكات',
+            onPressed: () => context.push(AppRoutes.paymentsPlans),
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.scale),
+            tooltip: 'المساعد القانوني الذكي',
+            onPressed: () => context.push(AppRoutes.legalAssistant),
+          ),
+          IconButton(
             icon: const Icon(LucideIcons.bell),
+            tooltip: 'مركز الإشعارات',
             onPressed: () => context.push(AppRoutes.notifications),
           ),
         ],

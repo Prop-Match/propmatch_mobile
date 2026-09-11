@@ -96,7 +96,15 @@ class _TenantBrowseScreenState extends State<TenantBrowseScreen> {
         title: const Text('اكتشف العقارات'),
         actions: [
           IconButton(
+            icon: const Icon(LucideIcons.scale),
+            tooltip: 'المساعد القانوني الذكي',
+            onPressed: () {
+              context.push(AppRoutes.legalAssistant);
+            },
+          ),
+          IconButton(
             icon: const Icon(LucideIcons.bell),
+            tooltip: 'مركز الإشعارات',
             onPressed: () {
               context.push(AppRoutes.notifications);
             },

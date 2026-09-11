@@ -102,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                       icon: LucideIcons.crown,
                       title: 'الباقات والاشتراكات',
                       subtitle: 'إدارة الباقة وترقية الحساب وطلب Boost',
-                      onTap: () => context.push(AppRoutes.landlord),
+                      onTap: () => context.push(AppRoutes.paymentsPlans),
                     ),
                   _buildProfileTile(
                     icon: LucideIcons.bell,
