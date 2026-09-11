@@ -25,6 +25,7 @@ import 'package:propmatch_mobile/features/matching_chat/presentation/screens/cha
 import 'package:propmatch_mobile/features/ekyc/presentation/screens/ekyc_verification_screen.dart';
 import 'package:propmatch_mobile/features/legal_support/presentation/screens/legal_assistant_screen.dart';
 import 'package:propmatch_mobile/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:propmatch_mobile/features/subscriptions/presentation/screens/packages_screen.dart';
 import 'package:propmatch_mobile/features/profile/presentation/screens/profile_screen.dart';
 
 class AppRouter {
@@ -162,6 +163,10 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.notifications,
           builder: (context, state) => const NotificationsScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.paymentsPlans,
+          builder: (context, state) => const PackagesScreen(),
         ),
         GoRoute(
           path: AppRoutes.profile,

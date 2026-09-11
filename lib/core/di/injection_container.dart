@@ -32,6 +32,11 @@ import 'package:propmatch_mobile/features/notifications/data/datasources/notific
 import 'package:propmatch_mobile/features/notifications/data/repositories/notifications_repository_impl.dart';
 import 'package:propmatch_mobile/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:propmatch_mobile/features/notifications/presentation/cubit/notifications_cubit.dart';
+// Subscriptions & Commercial
+import 'package:propmatch_mobile/features/subscriptions/data/datasources/commercial_remote_datasource.dart';
+import 'package:propmatch_mobile/features/subscriptions/data/repositories/commercial_repository_impl.dart';
+import 'package:propmatch_mobile/features/subscriptions/domain/repositories/commercial_repository.dart';
+import 'package:propmatch_mobile/features/subscriptions/presentation/cubit/commercial_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -132,5 +137,18 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<NotificationsCubit>(
     () => NotificationsCubit(repository: sl<NotificationsRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: Subscriptions & Commercial
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<CommercialRemoteDataSource>(
+    () => CommercialRemoteDataSourceImpl(sl<DioClient>()),
+  );
+  sl.registerLazySingleton<CommercialRepository>(
+    () => CommercialRepositoryImpl(sl<CommercialRemoteDataSource>()),
+  );
+  sl.registerFactory<CommercialCubit>(
+    () => CommercialCubit(repository: sl<CommercialRepository>()),
   );
 }
