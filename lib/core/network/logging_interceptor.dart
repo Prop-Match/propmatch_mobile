@@ -40,8 +40,14 @@ class LoggingInterceptor extends Interceptor {
       name: 'PropMatch.Network',
       error: err.error,
     );
-    if (err.response?.data != null) {
-      developer.log('💥 Error Response: ${err.response?.data}', name: 'PropMatch.Network');
+    final data = err.response?.data;
+    if (data != null) {
+      // For SSE streaming errors, data is ResponseBody - don't log as Instance
+      if (data is ResponseBody) {
+        developer.log('💥 Error Response: <ResponseBody stream> status=${err.response?.statusCode} headers=${err.response?.headers}', name: 'PropMatch.Network');
+      } else {
+        developer.log('💥 Error Response: $data', name: 'PropMatch.Network');
+      }
     }
 
     return handler.next(err);

@@ -17,7 +17,7 @@ class DeepLinkHelper {
         '✨ ${property.bedrooms} غرف نوم • ${property.isFurnished ? "مفروش" : "غير مفروش"}\n\n'
         'شاهد تفاصيل العقار وتواصل مباشرة عبر منصة بروب ماتش:\n$url';
 
-    await Share.share(text, subject: property.title);
+    await SharePlus.instance.share(ShareParams(text: text, subject: property.title));
   }
 
   static Future<void> shareTenantRequest(TenantRequestEntity request) async {
@@ -28,6 +28,6 @@ class DeepLinkHelper {
         '🛏️ ${request.requiredBedrooms} غرف • ${request.needsFurnished ? "مفروش" : "غير مفروش"}\n\n'
         'قدّم عرضك المباشر للمستأجر عبر منصة بروب ماتش:\n$url';
 
-    await Share.share(text, subject: 'طلب سكن في المنصورة');
+    await SharePlus.instance.share(ShareParams(text: text, subject: 'طلب سكن في المنصورة'));
   }
 }

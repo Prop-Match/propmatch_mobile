@@ -23,7 +23,7 @@ import 'package:propmatch_mobile/features/landlord/presentation/screens/landlord
 import 'package:propmatch_mobile/features/matching_chat/domain/entities/match_connection_entity.dart';
 import 'package:propmatch_mobile/features/matching_chat/presentation/screens/chat_room_screen.dart';
 import 'package:propmatch_mobile/features/ekyc/presentation/screens/ekyc_verification_screen.dart';
-import 'package:propmatch_mobile/features/legal_support/presentation/screens/legal_assistant_screen.dart';
+import 'package:propmatch_mobile/features/legal_support/presentation/screens/unified_assistant_screen.dart';
 import 'package:propmatch_mobile/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:propmatch_mobile/features/subscriptions/presentation/screens/packages_screen.dart';
 import 'package:propmatch_mobile/features/profile/presentation/screens/profile_screen.dart';
@@ -158,7 +158,7 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.legalAssistant,
-          builder: (context, state) => const LegalAssistantScreen(),
+          builder: (context, state) => const UnifiedAssistantScreen(),
         ),
         GoRoute(
           path: AppRoutes.notifications,

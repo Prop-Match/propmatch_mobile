@@ -37,11 +37,15 @@ import 'package:propmatch_mobile/features/subscriptions/data/datasources/commerc
 import 'package:propmatch_mobile/features/subscriptions/data/repositories/commercial_repository_impl.dart';
 import 'package:propmatch_mobile/features/subscriptions/domain/repositories/commercial_repository.dart';
 import 'package:propmatch_mobile/features/subscriptions/presentation/cubit/commercial_cubit.dart';
-// Legal Support
+// Legal Support (legacy buffered) + Unified Assistant (SSE)
 import 'package:propmatch_mobile/features/legal_support/data/datasources/legal_support_remote_datasource.dart';
+import 'package:propmatch_mobile/features/legal_support/data/datasources/unified_assistant_remote_datasource.dart';
 import 'package:propmatch_mobile/features/legal_support/data/repositories/legal_support_repository_impl.dart';
+import 'package:propmatch_mobile/features/legal_support/data/repositories/unified_assistant_repository_impl.dart';
 import 'package:propmatch_mobile/features/legal_support/domain/repositories/legal_support_repository.dart';
+import 'package:propmatch_mobile/features/legal_support/domain/repositories/unified_assistant_repository.dart';
 import 'package:propmatch_mobile/features/legal_support/presentation/cubit/legal_support_cubit.dart';
+import 'package:propmatch_mobile/features/legal_support/presentation/cubit/unified_assistant_cubit.dart';
 import 'package:propmatch_mobile/core/services/push_notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -159,7 +163,7 @@ Future<void> initDependencies() async {
   );
 
   // -------------------------------------------------------------
-  // Feature: Legal Support
+  // Feature: Legal Support (legacy)
   // -------------------------------------------------------------
   sl.registerLazySingleton<LegalSupportRemoteDataSource>(
     () => LegalSupportRemoteDataSourceImpl(sl<DioClient>()),
@@ -169,6 +173,19 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory<LegalSupportCubit>(
     () => LegalSupportCubit(repository: sl<LegalSupportRepository>()),
+  );
+
+  // -------------------------------------------------------------
+  // Feature: Unified Assistant (Legal + Support SSE + Tickets)
+  // -------------------------------------------------------------
+  sl.registerLazySingleton<UnifiedAssistantRemoteDataSource>(
+    () => UnifiedAssistantRemoteDataSourceImpl(sl<DioClient>()),
+  );
+  sl.registerLazySingleton<UnifiedAssistantRepository>(
+    () => UnifiedAssistantRepositoryImpl(sl<UnifiedAssistantRemoteDataSource>()),
+  );
+  sl.registerFactory<UnifiedAssistantCubit>(
+    () => UnifiedAssistantCubit(repository: sl<UnifiedAssistantRepository>()),
   );
 
   // -------------------------------------------------------------

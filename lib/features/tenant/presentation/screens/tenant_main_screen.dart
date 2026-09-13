@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:go_router/go_router.dart';
+import 'package:propmatch_mobile/core/router/app_routes.dart';
 import 'package:propmatch_mobile/core/theme/app_colors.dart';
 import 'tenant_browse_screen.dart';
 import 'my_tenant_requests_screen.dart';
@@ -29,6 +31,12 @@ class _TenantMainScreenState extends State<TenantMainScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push(AppRoutes.legalAssistant),
+        backgroundColor: AppColors.primary,
+        tooltip: 'المساعد الذكي الموحّد',
+        child: const Icon(LucideIcons.bot, color: Colors.white),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

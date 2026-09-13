@@ -6,6 +6,7 @@ import 'package:propmatch_mobile/core/theme/app_colors.dart';
 import 'package:propmatch_mobile/core/constants/app_constants.dart';
 import 'package:propmatch_mobile/core/router/app_routes.dart';
 import 'package:propmatch_mobile/core/widgets/app_text_field.dart';
+import 'package:propmatch_mobile/features/auth/presentation/cubit/auth_cubit.dart';
 import '../cubit/tenant_browse_cubit.dart';
 import '../widgets/property_card.dart';
 import '../widgets/filter_bottom_sheet.dart';
@@ -41,6 +42,142 @@ class _TenantBrowseScreenState extends State<TenantBrowseScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Widget _buildWelcomeHeader() {
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        final user = state is Authenticated ? state.user : null;
+        final name = user?.fullName.split(' ').first ?? 'ضيفنا';
+        final isVerified = user?.isIdentityVerified ?? false;
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.primary, AppColors.primaryDark],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('أهلاً، $name 👋',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        const Icon(LucideIcons.map_pin, color: Colors.white70, size: 12),
+                        const SizedBox(width: 4),
+                        const Text('المنصورة • ابحث بذكاء باللغة العربية',
+                            style: TextStyle(color: Colors.white70, fontSize: 11)),
+                        if (isVerified) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(LucideIcons.shield_check, size: 10, color: AppColors.success),
+                                SizedBox(width: 2),
+                                Text('موثّق', style: TextStyle(fontSize: 10, color: AppColors.success, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (!isVerified)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: InkWell(
+                          onTap: () => context.push(AppRoutes.ekyc),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20)),
+                            child: const Text('وثّق هويتك لزيادة فرص المطابقة →',
+                                style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle),
+                child: const Icon(LucideIcons.sparkles, color: Colors.white, size: 20),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildQuickActions() {
+    final actions = [
+      _QuickAction(icon: LucideIcons.bot, label: 'المساعد الذكي', sub: 'قانوني + دعم', color: AppColors.primary, onTap: () => context.push(AppRoutes.legalAssistant)),
+      _QuickAction(icon: LucideIcons.file_plus, label: 'نشر طلب', sub: 'طلب سكن مخصص', color: AppColors.trustBlue, onTap: () => context.push(AppRoutes.tenantPostRequest)),
+      _QuickAction(icon: LucideIcons.bell, label: 'الإشعارات', sub: 'تنبيهات سريعة', color: AppColors.success, onTap: () => context.push(AppRoutes.notifications)),
+      _QuickAction(icon: LucideIcons.shield_check, label: 'توثيق الهوية', sub: 'eKYC سريع', color: AppColors.warning, onTap: () => context.push(AppRoutes.ekyc)),
+    ];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('خدمات سريعة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          const SizedBox(height: 8),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 0.85,
+            ),
+            itemCount: actions.length,
+            itemBuilder: (_, i) => _quickCard(actions[i]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _quickCard(_QuickAction a) {
+    return InkWell(
+      onTap: a.onTap,
+      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(color: a.color.withValues(alpha: 0.1), shape: BoxShape.circle),
+                child: Icon(a.icon, color: a.color, size: 18)),
+            const SizedBox(height: 6),
+            Text(a.label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11), textAlign: TextAlign.center),
+            Text(a.sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 9), textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+      ),
+    );
   }
 
   void _onChipSelected(String chip) {
@@ -96,8 +233,8 @@ class _TenantBrowseScreenState extends State<TenantBrowseScreen> {
         title: const Text('اكتشف العقارات'),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.scale),
-            tooltip: 'المساعد القانوني الذكي',
+            icon: const Icon(LucideIcons.bot),
+            tooltip: 'المساعد الذكي الموحّد',
             onPressed: () {
               context.push(AppRoutes.legalAssistant);
             },
@@ -113,6 +250,10 @@ class _TenantBrowseScreenState extends State<TenantBrowseScreen> {
       ),
       body: Column(
         children: [
+          // 1. Welcome hero + verification banner
+          _buildWelcomeHeader(),
+          // 2. Quick actions grid - makes every feature 1 tap away
+          _buildQuickActions(),
           // Search & Filter Header
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -278,3 +419,13 @@ class _TenantBrowseScreenState extends State<TenantBrowseScreen> {
     );
   }
 }
+
+class _QuickAction {
+  final IconData icon;
+  final String label;
+  final String sub;
+  final Color color;
+  final VoidCallback onTap;
+  _QuickAction({required this.icon, required this.label, required this.sub, required this.color, required this.onTap});
+}
+

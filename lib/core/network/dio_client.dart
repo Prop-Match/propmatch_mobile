@@ -3,6 +3,7 @@ import 'package:propmatch_mobile/core/storage/shared_preferences_service.dart';
 import 'auth_interceptor.dart';
 import 'cache_interceptor.dart';
 import 'logging_interceptor.dart';
+import 'refresh_interceptor.dart';
 
 class DioClient {
   final Dio _dio;
@@ -32,6 +33,9 @@ class DioClient {
       cacheInterceptor,
       LoggingInterceptor(),
     ]);
+    // Refresh must be after Auth but handle 401 before other handlers
+    // Insert refresh logic: we need dio reference, so add now
+    _dio.interceptors.add(RefreshInterceptor(_dio, storageService));
   }
 
   Dio get dio => _dio;

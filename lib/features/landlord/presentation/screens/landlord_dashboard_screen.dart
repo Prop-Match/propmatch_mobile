@@ -31,13 +31,8 @@ class _LandlordDashboardScreenState extends State<LandlordDashboardScreen> {
         title: const Text('لوحة تحكم المالك'),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.package_open),
-            tooltip: 'الباقات والاشتراكات',
-            onPressed: () => context.push(AppRoutes.paymentsPlans),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.scale),
-            tooltip: 'المساعد القانوني الذكي',
+            icon: const Icon(LucideIcons.bot),
+            tooltip: 'المساعد الذكي الموحّد',
             onPressed: () => context.push(AppRoutes.legalAssistant),
           ),
           IconButton(
@@ -95,6 +90,9 @@ class _LandlordDashboardScreenState extends State<LandlordDashboardScreen> {
                   children: [
                     // Quota & Quick Action Banner
                     _buildQuotaBanner(stats),
+                    const SizedBox(height: AppConstants.paddingMd),
+                    // Quick actions grid - 1 tap to every feature
+                    _buildQuickActions(),
                     const SizedBox(height: AppConstants.paddingLg),
 
                     // Stats Grid
@@ -272,6 +270,41 @@ class _LandlordDashboardScreenState extends State<LandlordDashboardScreen> {
     );
   }
 
+  Widget _buildQuickActions() {
+    final actions = [
+      _LQuick(icon: LucideIcons.plus, label: 'إضافة وحدة', color: AppColors.primary, onTap: () async { await context.push(AppRoutes.landlordAddProperty); if (context.mounted) context.read<LandlordDashboardCubit>().loadDashboard(); }),
+      _LQuick(icon: LucideIcons.users, label: 'سوق الطلبات', color: AppColors.trustBlue, onTap: () => context.push(AppRoutes.landlordLeads)),
+      _LQuick(icon: LucideIcons.bot, label: 'المساعد الذكي', color: AppColors.primaryDark, onTap: () => context.push(AppRoutes.legalAssistant)),
+      _LQuick(icon: LucideIcons.badge_check, label: 'توثيق الهوية', color: AppColors.warning, onTap: () => context.push(AppRoutes.ekyc)),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('خدمات سريعة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+        const SizedBox(height: 8),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 8, crossAxisSpacing: 8, childAspectRatio: 0.9),
+          itemCount: actions.length,
+          itemBuilder: (_, i) => InkWell(
+            onTap: actions[i].onTap,
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(AppConstants.radiusMd), border: Border.all(color: AppColors.border)),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: actions[i].color.withValues(alpha: 0.1), shape: BoxShape.circle), child: Icon(actions[i].icon, color: actions[i].color, size: 18)),
+                const SizedBox(height: 6),
+                Text(actions[i].label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11), textAlign: TextAlign.center),
+              ]),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildEmptyPortfolioView() {
     return Center(
       child: Padding(
@@ -302,3 +335,12 @@ class _LandlordDashboardScreenState extends State<LandlordDashboardScreen> {
     );
   }
 }
+
+class _LQuick {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  _LQuick({required this.icon, required this.label, required this.color, required this.onTap});
+}
+
